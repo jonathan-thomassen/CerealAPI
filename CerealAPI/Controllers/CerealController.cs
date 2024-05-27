@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+
 using CerealAPI.Enums;
 using CerealAPI.Models;
 using CerealAPI.Services;
@@ -81,7 +82,7 @@ namespace CerealAPI.Controllers
                 sortBy,
                 sortAsc);
 
-            if (cereals.Any())
+            if (cereals.Count > 0)
                 return Ok(cereals);
 
             return NoContent();

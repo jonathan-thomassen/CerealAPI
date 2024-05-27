@@ -45,7 +45,7 @@ namespace CerealAPI.Services
             return cereals;
         }
 
-        private List<CerealProduct> MinMaxFilterShort(List<CerealProduct> cereals, string property, short? min, bool? minInclusive, short? max, bool? maxInclusive)
+        private static List<CerealProduct> MinMaxFilterShort(List<CerealProduct> cereals, string property, short? min, bool? minInclusive, short? max, bool? maxInclusive)
         {
             if (min != null && minInclusive != null)
             {
@@ -74,7 +74,7 @@ namespace CerealAPI.Services
             return cereals;
         }
 
-        private List<CerealProduct> MinMaxFilterByte(List<CerealProduct> cereals, string property, int? min, bool? minInclusive, int? max, bool? maxInclusive)
+        private static List<CerealProduct> MinMaxFilterByte(List<CerealProduct> cereals, string property, int? min, bool? minInclusive, int? max, bool? maxInclusive)
         {
             if (min != null && minInclusive != null)
             {
@@ -103,7 +103,7 @@ namespace CerealAPI.Services
             return cereals;
         }        
 
-        private List<CerealProduct> Sort(List<CerealProduct> cereals, CerealProperty sortBy, bool sortAsc)
+        private static List<CerealProduct> Sort(List<CerealProduct> cereals, CerealProperty sortBy, bool sortAsc)
         {
             if (sortAsc)
             {
