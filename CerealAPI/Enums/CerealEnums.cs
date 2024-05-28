@@ -1,10 +1,5 @@
 ﻿namespace CerealAPI.Enums
-{    public record FilterParameter<T>(
-        CerealProperty Property,
-        MinMax MinMax,
-        InclExcl InclExcl,
-        T Value);
-
+{
     public enum CerealProperty
     {
         Id,

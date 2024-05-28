@@ -1,8 +1,6 @@
 ﻿using CerealAPI.Enums;
 using CerealAPI.Models;
 using CerealAPI.Repositories;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace CerealAPI.Services
 {
@@ -133,8 +131,10 @@ namespace CerealAPI.Services
             {
                 cereals = MinMaxFilterFloat(cereals, CerealProperty.Rating, minRating, minRatingIncl, maxRating, maxRatingIncl);
             }
-
-
+            if (shelf != null)
+            {
+                cereals = cereals.Where(c => c.Shelf == shelf).ToList();
+            }
             if (sortBy != null)
             {
                 cereals = Sort(cereals, (CerealProperty)sortBy, sortOrder);

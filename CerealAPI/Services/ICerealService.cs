@@ -1,6 +1,5 @@
 ﻿using CerealAPI.Enums;
 using CerealAPI.Models;
-using Microsoft.AspNetCore.Mvc;
 
 namespace CerealAPI.Services
 {

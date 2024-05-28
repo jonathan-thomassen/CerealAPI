@@ -1,6 +1,5 @@
 ﻿using CerealAPI.Models;
 using CerealAPI.Contexts;
-using System.Linq;
 
 namespace CerealAPI.Repositories
 {
