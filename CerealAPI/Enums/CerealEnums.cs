@@ -1,5 +1,10 @@
 ﻿namespace CerealAPI.Enums
-{
+{    public record FilterParameter<T>(
+        CerealProperty Property,
+        MinMax MinMax,
+        InclExcl InclExcl,
+        T Value);
+
     public enum CerealProperty
     {
         Id,
@@ -36,5 +41,23 @@
     {
         Cold,
         Hot
+    }
+
+    public enum MinMax
+    {
+        Min,
+        Max
+    }
+
+    public enum InclExcl
+    {
+        Incl,
+        Excl
+    }
+
+    public enum SortOrder
+    {
+        Asc,
+        Desc
     }
 }
