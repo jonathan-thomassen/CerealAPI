@@ -130,5 +130,22 @@ namespace CerealAPI.Controllers
 
             return NoContent();
         }
+
+        [HttpPost(Name = "PostNewCerealProduct")]
+        public async Task<ActionResult> PostCereal(
+            [FromBody] CerealProduct cereal)
+        {
+            var newCereal = await cerealService.PostCereal(cereal);
+
+            if (newCereal != null)
+            {
+                return Created("newCereal.Id", newCereal);
+            }
+            else
+            {
+                return BadRequest();
+            }
+            
+        }
     }
 }

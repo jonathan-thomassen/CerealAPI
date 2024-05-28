@@ -17,22 +17,32 @@ namespace CerealAPI.Contexts
 
         public virtual DbSet<CerealProduct> Cereals { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnConfiguring(
+            DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=CerealDatabase;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
+                optionsBuilder.UseSqlServer(
+                    "Data Source=(localdb)\\MSSQLLocalDB;" +
+                    "Initial Catalog=CerealDatabase;" +
+                    "Integrated Security=True;" +
+                    "Connect Timeout=30;" +
+                    "Encrypt=False;" +
+                    "Trust Server Certificate=False;" + 
+                    "Application Intent=ReadWrite;" +
+                    "Multi Subnet Failover=False");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+            modelBuilder.HasAnnotation("Relational:Collation",
+                "SQL_Latin1_General_CP1_CI_AS");
 
             modelBuilder.Entity<CerealProduct>(entity =>
             {
                 entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).IsRequired();
                 entity.Property(e => e.Name).IsRequired();
                 entity.Property(e => e.Manufacturer).IsRequired();
                 entity.Property(e => e.CerealType).IsRequired();

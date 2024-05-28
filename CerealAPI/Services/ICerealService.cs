@@ -1,5 +1,6 @@
 ﻿using CerealAPI.Enums;
 using CerealAPI.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CerealAPI.Services
 {
@@ -61,5 +62,6 @@ namespace CerealAPI.Services
             byte? shelf,
             CerealProperty? sortBy,
             SortOrder sortOrder = SortOrder.Asc);
+        Task<CerealProduct?> PostCereal(CerealProduct cereal);
     }
 }

@@ -10,8 +10,12 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
 var controllers = services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-controllers.AddJsonOptions(options => { options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); });
+// Learn more about configuring Swagger/OpenAPI at
+// https://aka.ms/aspnetcore/swashbuckle
+controllers.AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
