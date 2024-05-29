@@ -10,8 +10,10 @@ namespace CerealAPI.Controllers
     [Route("[controller]")]
     public class CerealController(ICerealService cerealService) : ControllerBase
     {
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet(Name = "GetCerealProducts")]
-        public ActionResult<IEnumerable<CerealProduct>> GetCereal(
+        public ActionResult<List<CerealProduct>> GetCereal(
             [FromQuery] int? id,
             [FromQuery] string? name,
             [FromQuery] Manufacturer? manufacturer,
@@ -128,24 +130,52 @@ namespace CerealAPI.Controllers
             if (cereals.Count > 0)
                 return Ok(cereals);
 
-            return NoContent();
+            return NotFound();
         }
 
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost(Name = "PostNewCerealProduct")]
-        public async Task<ActionResult> PostCereal(
+        public async Task<ActionResult<CerealProduct>> PostCereal(
             [FromBody] CerealProduct cereal)
         {
             var newCereal = await cerealService.PostCereal(cereal);
 
             if (newCereal != null)
             {
-                return Created("newCereal.Id", newCereal);
+                return CreatedAtAction(nameof(PostCereal), new { id = newCereal.Id }, newCereal);
             }
             else
             {
                 return BadRequest();
             }
             
+        }
+
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpDelete(Name = "DeleteCerealProduct")]
+        public async Task<IActionResult> DeleteCereal(
+            [FromQuery] int id)
+        {
+            var result = await cerealService.DeleteCereal(id);
+
+            if (result != null)
+            {
+                if ((bool)result)
+                {
+                    return NoContent();
+                } else
+                {
+                    return BadRequest();
+                }
+            }
+            else
+            {
+                return NotFound();
+            }
+
         }
     }
 }

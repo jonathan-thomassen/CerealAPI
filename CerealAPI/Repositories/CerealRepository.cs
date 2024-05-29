@@ -7,6 +7,13 @@ namespace CerealAPI.Repositories
     {
         private static readonly CerealContext _dbContext = new();
 
+        public async Task<CerealProduct?> GetCerealById(int id)
+        {
+            var cereal = await _dbContext.FindAsync<CerealProduct>(id);
+
+            return cereal;
+        }
+
         public List<CerealProduct> GetAllCereal()
         {
             var cereals = _dbContext.Set<CerealProduct>().ToList();
@@ -19,13 +26,28 @@ namespace CerealAPI.Repositories
             _dbContext.Add(cereal);
             var result = await _dbContext.SaveChangesAsync();
 
-            if (result == 1)
+            if (result > 0)
             {
                 return cereal;
             }
             else
             {
                 return null;
+            }
+        }
+
+        public async Task<bool> DeleteCereal(CerealProduct cereal)
+        {
+            _dbContext.Remove(cereal);
+            var result = await _dbContext.SaveChangesAsync();
+
+            if (result > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }

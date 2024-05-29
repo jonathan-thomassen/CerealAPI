@@ -259,5 +259,28 @@ namespace CerealAPI.Services
             var newCereal = await repository.PostCereal(cereal);
             return newCereal;
         }
+
+        public async Task<bool?> DeleteCereal(int id)
+        {
+            var cereal = await repository.GetCerealById(id);
+
+            if (cereal != null)
+            {
+                var success = await repository.DeleteCereal(cereal);
+
+                if (success)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }

@@ -63,5 +63,6 @@ namespace CerealAPI.Services
             CerealProperty? sortBy,
             SortOrder sortOrder = SortOrder.Asc);
         Task<CerealProduct?> PostCereal(CerealProduct cereal);
+        Task<bool?> DeleteCereal(int id);
     }
 }
