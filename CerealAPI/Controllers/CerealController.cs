@@ -138,6 +138,7 @@ namespace CerealAPI.Controllers
 
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpPost(Name = "PostNewCerealProduct")]
         public async Task<ActionResult<CerealProduct>> PostCereal(
             [FromBody] CerealProduct cereal)
@@ -158,6 +159,7 @@ namespace CerealAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpPut(Name = "UpdateCerealProduct")]
         public async Task<ActionResult<CerealProduct>> UpdateCereal(
             [FromBody] CerealProduct cereal)
@@ -185,6 +187,7 @@ namespace CerealAPI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpDelete(Name = "DeleteCerealProduct")]
         public async Task<IActionResult> DeleteCereal(
             [FromQuery] int id)
@@ -206,7 +209,6 @@ namespace CerealAPI.Controllers
             {
                 return NotFound();
             }
-
         }
     }
 }

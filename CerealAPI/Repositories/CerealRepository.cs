@@ -1,5 +1,5 @@
-﻿using CerealAPI.Models;
-using CerealAPI.Contexts;
+﻿using CerealAPI.Contexts;
+using CerealAPI.Models;
 
 namespace CerealAPI.Repositories
 {

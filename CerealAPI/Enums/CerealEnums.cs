@@ -38,18 +38,6 @@
         Hot
     }
 
-    public enum MinMax
-    {
-        Min,
-        Max
-    }
-
-    public enum InclExcl
-    {
-        Incl,
-        Excl
-    }
-
     public enum SortOrder
     {
         Asc,

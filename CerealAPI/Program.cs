@@ -1,10 +1,11 @@
 using System.Text.Json.Serialization;
 
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
 using CerealAPI.Contexts;
 using CerealAPI.Repositories;
 using CerealAPI.Services;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,33 +22,29 @@ controllers.AddJsonOptions(options =>
 
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
-
-services.AddDbContext<CerealContext>(
-    options => options.EnableSensitiveDataLogging());
-services.AddDbContext<ApplicationDbContext>(
-    options =>options.UseInMemoryDatabase("AppDb"));
-
+services.AddDbContext<CerealContext>(options =>
+{
+    options.EnableSensitiveDataLogging();
+});
+services.AddDbContext<ApplicationDbContext>(options =>
+{
+    options.UseInMemoryDatabase("AppDb");
+});
 services.AddAuthorization();
-services.AddIdentityApiEndpoints<IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>();
-
+services.AddIdentityApiEndpoints<IdentityUser>()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 services.AddTransient<ICerealRepository, CerealRepository>();
 services.AddTransient<ICerealService, CerealService>();
 
 var app = builder.Build();
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapIdentityApi<IdentityUser>();
-
 app.MapControllers();
-
 app.Run();
