@@ -77,13 +77,13 @@ namespace CerealAPI.Services
             }
             if (manufacturer != null)
             {
-                var manufacturerId = manufacturer.ToString()[0];
+                var manufacturerId = manufacturer?.ToString()[0];
                 cereals = cereals.Where(c => c.Manufacturer == manufacturerId)
                     .ToList();
             }
             if (cerealType != null)
             {
-                var cerealTypeId = cerealType.ToString()[0];
+                var cerealTypeId = cerealType?.ToString()[0];
                 cereals = cereals.Where(c => c.CerealType == cerealTypeId)
                     .ToList();
             }
@@ -167,14 +167,14 @@ namespace CerealAPI.Services
                 {
                     if (minIncl != null && (bool)minIncl)
                     {
-                        cereals = cereals.Where(c => (int)c
-                            .GetType().GetProperty(property.ToString())
+                        cereals = cereals.Where(c => (int?)c
+                            .GetType().GetProperty(property.ToString())?
                             .GetValue(c) >= min).ToList();
                     }
                     else
                     {
-                        cereals = cereals.Where(c => (int)c
-                            .GetType().GetProperty(property.ToString())
+                        cereals = cereals.Where(c => (int?)c
+                            .GetType().GetProperty(property.ToString())?
                             .GetValue(c) > min).ToList();
                     }
                 }
@@ -182,14 +182,14 @@ namespace CerealAPI.Services
                 {
                     if (maxIncl != null && (bool)maxIncl)
                     {
-                        cereals = cereals.Where(c => (int)c
-                            .GetType().GetProperty(property.ToString())
+                        cereals = cereals.Where(c => (int?)c
+                            .GetType().GetProperty(property.ToString())?
                             .GetValue(c) >= min).ToList();
                     }
                     else
                     {
-                        cereals = cereals.Where(c => (int)c
-                            .GetType().GetProperty(property.ToString())
+                        cereals = cereals.Where(c => (int?)c
+                            .GetType().GetProperty(property.ToString())?
                             .GetValue(c) > min).ToList();
                     }
                 }
@@ -205,14 +205,14 @@ namespace CerealAPI.Services
                 {
                     if (minIncl != null && (bool)minIncl)
                     {
-                        cereals = cereals.Where(c => (double)c
-                            .GetType().GetProperty(property.ToString())
+                        cereals = cereals.Where(c => (double?)c
+                            .GetType().GetProperty(property.ToString())?
                             .GetValue(c) >= min).ToList();
                     }
                     else
                     {
-                        cereals = cereals.Where(c => (double)c
-                            .GetType().GetProperty(property.ToString())
+                        cereals = cereals.Where(c => (double?)c
+                            .GetType().GetProperty(property.ToString())?
                             .GetValue(c) > min).ToList();
                     }
                 }
@@ -220,14 +220,14 @@ namespace CerealAPI.Services
                 {
                     if (maxIncl != null && (bool)maxIncl)
                     {
-                        cereals = cereals.Where(c => (double)c
-                            .GetType().GetProperty(property.ToString())
+                        cereals = cereals.Where(c => (double?)c
+                            .GetType().GetProperty(property.ToString())?
                             .GetValue(c) >= min).ToList();
                     }
                     else
                     {
-                        cereals = cereals.Where(c => (double)c
-                            .GetType().GetProperty(property.ToString())
+                        cereals = cereals.Where(c => (double?)c
+                            .GetType().GetProperty(property.ToString())?
                             .GetValue(c) > min).ToList();
                     }
                 }
@@ -241,13 +241,13 @@ namespace CerealAPI.Services
                 if (sortOrder == SortOrder.Asc)
                 {
                     cereals = cereals.OrderBy(c => c
-                        .GetType().GetProperty(sortBy.ToString())
+                        .GetType().GetProperty(sortBy.ToString())?
                         .GetValue(c)).ToList();
                 }
                 else
                 {
                     cereals = cereals.OrderByDescending(c => c
-                        .GetType().GetProperty(sortBy.ToString())
+                        .GetType().GetProperty(sortBy.ToString())?
                         .GetValue(c)).ToList();
                 }
 

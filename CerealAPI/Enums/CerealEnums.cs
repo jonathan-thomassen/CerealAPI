@@ -12,7 +12,7 @@
         Sodium,
         Fiber,
         Carbohydrates,
-        Sugar,
+        Sugars,
         Potassium,
         Vitamins,
         Shelf,

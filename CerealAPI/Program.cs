@@ -3,7 +3,6 @@ using System.Text.Json.Serialization;
 using CerealAPI.Contexts;
 using CerealAPI.Repositories;
 using CerealAPI.Services;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
