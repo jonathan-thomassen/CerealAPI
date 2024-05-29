@@ -3,6 +3,8 @@ using System.Text.Json.Serialization;
 using CerealAPI.Contexts;
 using CerealAPI.Repositories;
 using CerealAPI.Services;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,10 +22,13 @@ controllers.AddJsonOptions(options =>
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 
-services.AddDbContext<CerealContext>(options =>
-{
-    options.EnableSensitiveDataLogging();
-});
+services.AddDbContext<CerealContext>(
+    options => options.EnableSensitiveDataLogging());
+services.AddDbContext<ApplicationDbContext>(
+    options =>options.UseInMemoryDatabase("AppDb"));
+
+services.AddAuthorization();
+services.AddIdentityApiEndpoints<IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>();
 
 services.AddTransient<ICerealRepository, CerealRepository>();
 services.AddTransient<ICerealService, CerealService>();
@@ -40,6 +45,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.MapIdentityApi<IdentityUser>();
 
 app.MapControllers();
 

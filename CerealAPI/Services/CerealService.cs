@@ -120,7 +120,7 @@ namespace CerealAPI.Services
             }
             if (minSugars != null || maxSugars != null)
             {
-                cereals = MinMaxFilterInt(cereals, CerealProperty.Sugar,
+                cereals = MinMaxFilterInt(cereals, CerealProperty.Sugars,
                     minSugars, minSugIncl, maxSugars, maxSugIncl);
             }
             if (minPotassium != null || maxPotassium != null)

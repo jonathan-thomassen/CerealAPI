@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using CerealAPI.Enums;
@@ -6,10 +7,12 @@ using CerealAPI.Services;
 
 namespace CerealAPI.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class CerealController(ICerealService cerealService) : ControllerBase
     {
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet(Name = "GetCerealProducts")]
