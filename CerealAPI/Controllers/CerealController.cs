@@ -143,13 +143,40 @@ namespace CerealAPI.Controllers
 
             if (newCereal != null)
             {
-                return CreatedAtAction(nameof(PostCereal), new { id = newCereal.Id }, newCereal);
+                return CreatedAtAction(nameof(PostCereal),
+                    new { id = newCereal.Id }, newCereal);
             }
             else
             {
                 return BadRequest();
             }
-            
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPut(Name = "UpdateCerealProduct")]
+        public async Task<ActionResult<CerealProduct>> UpdateCereal(
+            [FromBody] CerealProduct cereal)
+        {
+            var result = await cerealService.UpdateCereal(cereal);
+
+            if (result.cereal != null)
+            {
+                if (result.existed)
+                {
+                    return Ok(result.cereal);
+                }
+                else
+                {
+                    return CreatedAtAction(nameof(UpdateCereal),
+                    new { id = result.cereal.Id }, result.cereal);
+                }
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -166,7 +193,8 @@ namespace CerealAPI.Controllers
                 if ((bool)result)
                 {
                     return NoContent();
-                } else
+                }
+                else
                 {
                     return BadRequest();
                 }

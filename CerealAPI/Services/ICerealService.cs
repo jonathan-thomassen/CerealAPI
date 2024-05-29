@@ -63,6 +63,7 @@ namespace CerealAPI.Services
             CerealProperty? sortBy,
             SortOrder sortOrder = SortOrder.Asc);
         Task<CerealProduct?> PostCereal(CerealProduct cereal);
+        Task<(CerealProduct? cereal, bool existed)> UpdateCereal(CerealProduct cereal);
         Task<bool?> DeleteCereal(int id);
     }
 }

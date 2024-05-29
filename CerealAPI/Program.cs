@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using CerealAPI.Contexts;
 using CerealAPI.Repositories;
 using CerealAPI.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +21,10 @@ controllers.AddJsonOptions(options =>
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 
-services.AddDbContext<CerealContext>();
+services.AddDbContext<CerealContext>(options =>
+{
+    options.EnableSensitiveDataLogging();
+});
 
 services.AddTransient<ICerealRepository, CerealRepository>();
 services.AddTransient<ICerealService, CerealService>();
