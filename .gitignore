@@ -363,4 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # Images folder
-/Images
+Images/
