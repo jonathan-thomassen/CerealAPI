@@ -79,6 +79,25 @@ namespace CerealAPI.Services
             return success ? imageEntry : null;
         }
 
+        public async Task<(ImageEntry? imageEntry, bool existed)>
+            UpdateImageEntry(ImageEntry newImageEntry)
+        {
+            var oldImageEntry = await repository.GetImageEntryById(
+                newImageEntry.Id);
+
+            if (oldImageEntry != null)
+            {
+                var success = await repository.UpdateImageEntry(
+                    oldImageEntry, newImageEntry);
+                return success ? (oldImageEntry, true) : (null, true);
+            }
+            else
+            {
+                var success = await repository.PostImageEntry(newImageEntry);
+                return success ? (newImageEntry, false) : (null, false);
+            }
+        }
+
         public async Task<bool?> DeleteImageByCerealId(int cerealId)
         {
             var imageEntry = await repository.GetImageEntryByCerealId(cerealId);

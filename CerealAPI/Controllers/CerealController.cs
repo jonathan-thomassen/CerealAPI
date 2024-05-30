@@ -162,20 +162,21 @@ namespace CerealAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpPut(Name = "UpdateCerealProduct")]
         public async Task<ActionResult<CerealProduct>> UpdateCereal(
-            [FromBody] CerealProduct cereal)
+            [FromBody] CerealProduct oldCereal)
         {
-            var result = await cerealService.UpdateCereal(cereal);
+            var (newCereal, existed) =
+                await cerealService.UpdateCereal(oldCereal);
 
-            if (result.cereal != null)
+            if (newCereal != null)
             {
-                if (result.existed)
+                if (existed)
                 {
-                    return Ok(result.cereal);
+                    return Ok(newCereal);
                 }
                 else
                 {
                     return CreatedAtAction(nameof(UpdateCereal),
-                    new { id = result.cereal.Id }, result.cereal);
+                    new { id = newCereal.Id }, newCereal);
                 }
             }
             else
@@ -195,14 +196,7 @@ namespace CerealAPI.Controllers
 
             if (result != null)
             {
-                if ((bool)result)
-                {
-                    return NoContent();
-                }
-                else
-                {
-                    return BadRequest();
-                }
+                return (bool)result ? NoContent() : BadRequest();
             }
             else
             {

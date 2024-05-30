@@ -66,6 +66,35 @@ namespace CerealAPI.Controllers
             }
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [HttpPut(Name = "UpdateImageEntry")]
+        public async Task<ActionResult<ImageEntry>> UpdateImageEntry(
+            [FromBody] ImageEntry oldImageEntry)
+        {
+            var (newImageEntry, existed) =
+                await imageService.UpdateImageEntry(oldImageEntry);
+
+            if (newImageEntry != null)
+            {
+                if (existed)
+                {
+                    return Ok(newImageEntry);
+                }
+                else
+                {
+                    return CreatedAtAction(nameof(UpdateImageEntry),
+                    new { id = newImageEntry.Id }, newImageEntry);
+                }
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
