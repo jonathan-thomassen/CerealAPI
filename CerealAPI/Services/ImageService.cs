@@ -102,7 +102,7 @@ namespace CerealAPI.Services
             }
 
             var newImageEntry = new ImageEntry(
-                Id: oldImageEntry.Id,
+                Id: oldImageEntry != null ? oldImageEntry.Id : 0,
                 CerealId: cerealId,
                 Path: path);
 
