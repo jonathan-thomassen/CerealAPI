@@ -4,7 +4,8 @@ using CerealAPI.Repositories;
 
 namespace CerealAPI.Services
 {
-    public class CerealService(ICerealRepository repository) :
+    public class CerealService(
+        ICerealRepository repository, IImageRepository imageRepository) :
         ICerealService
     {
         public List<CerealProduct> GetCereal(
@@ -283,6 +284,13 @@ namespace CerealAPI.Services
         public async Task<bool?> DeleteCereal(int id)
         {
             var cereal = await repository.GetCerealById(id);
+
+            // Delete soon-to-be orphan image file if it exists
+            var imageEntry = await imageRepository.GetImageEntryByCerealId(id);
+            if (imageEntry != null)
+            {
+                File.Delete(imageEntry.Path);
+            }
 
             if (cereal != null)
             {
