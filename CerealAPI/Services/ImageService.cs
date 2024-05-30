@@ -14,7 +14,7 @@ namespace CerealAPI.Services
         public async Task<(byte[]? image, ImageType? imageType)>
             GetImageByCerealId(int cerealId)
         {
-            var imageEntry = repository.GetImageEntryByCerealId(cerealId);
+            var imageEntry = await repository.GetImageEntryByCerealId(cerealId);
 
             if (imageEntry != null)
             {
@@ -77,6 +77,23 @@ namespace CerealAPI.Services
             var success = await repository.PostImageEntry(imageEntry);
 
             return success ? imageEntry : null;
+        }
+
+        public async Task<bool?> DeleteImageByCerealId(int cerealId)
+        {
+            var imageEntry = await repository.GetImageEntryByCerealId(cerealId);
+
+            if (imageEntry != null)
+            {
+                File.Delete(imageEntry.Path);
+
+                var success = await repository.DeleteImageEntry(imageEntry);
+                return success;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

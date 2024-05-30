@@ -189,8 +189,7 @@ namespace CerealAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpDelete(Name = "DeleteCerealProduct")]
-        public async Task<IActionResult> DeleteCereal(
-            [FromQuery] int id)
+        public async Task<IActionResult> DeleteCereal([FromQuery] int id)
         {
             var result = await cerealService.DeleteCereal(id);
 

@@ -1,5 +1,6 @@
 ﻿using CerealAPI.Contexts;
 using CerealAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CerealAPI.Repositories
 {
@@ -7,9 +8,9 @@ namespace CerealAPI.Repositories
     {
         private static readonly ImageContext _dbContext = new();
 
-        public ImageEntry? GetImageEntryByCerealId(int cerealId)
+        public async Task<ImageEntry?> GetImageEntryByCerealId(int cerealId)
         {
-            var imageEntry = _dbContext.Images.First(
+            var imageEntry = await  _dbContext.Images.FirstOrDefaultAsync(
                 i => i.CerealId == cerealId);
 
             return imageEntry;
@@ -18,6 +19,14 @@ namespace CerealAPI.Repositories
         public async Task<bool> PostImageEntry(ImageEntry entry)
         {
             _dbContext.Add(entry);
+            var result = await _dbContext.SaveChangesAsync();
+
+            return result > 0;
+        }
+
+        public async Task<bool> DeleteImageEntry(ImageEntry entry)
+        {
+            _dbContext.Remove(entry);
             var result = await _dbContext.SaveChangesAsync();
 
             return result > 0;

@@ -4,7 +4,8 @@ namespace CerealAPI.Repositories
 {
     public interface IImageRepository
     {
-        ImageEntry? GetImageEntryByCerealId(int cerealId);
+        Task<ImageEntry?> GetImageEntryByCerealId(int cerealId);
         Task<bool> PostImageEntry(ImageEntry entry);
+        Task<bool> DeleteImageEntry(ImageEntry entry);
     }
 }

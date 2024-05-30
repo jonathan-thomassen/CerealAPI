@@ -66,6 +66,7 @@ namespace CerealAPI.Services
         {
             List<CerealProduct> cereals = repository.GetAllCereal();
 
+            // TODO: Create some more functions here
             if (id != null)
             {
                 cereals = cereals.Where(c => c.Id == id).ToList();

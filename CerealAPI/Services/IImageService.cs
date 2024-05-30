@@ -7,7 +7,7 @@ namespace CerealAPI.Services
     {
         Task<(byte[]? image, ImageType? imageType)>GetImageByCerealId(
             int cerealId);
-
         Task<ImageEntry?> PostImage(int cerealId, IList<IFormFile> fileList);
+        Task<bool?> DeleteImageByCerealId(int cerealId);
     }
 }

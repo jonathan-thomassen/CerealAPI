@@ -19,23 +19,24 @@ namespace CerealAPI.Controllers
         public async Task<ActionResult<byte[]>> GetImageByCerealId(
             [FromQuery] int cerealId)
         {
-            var tuple = await imageService.GetImageByCerealId(cerealId);
+            var (image, imageType) =
+                await imageService.GetImageByCerealId(cerealId);
 
-            if (tuple.image != null)
+            if (image != null)
             {
-                if (tuple.imageType == ImageType.Jpeg)
+                if (imageType == ImageType.Jpeg)
                 {
-                    return File(tuple.image, "image/jpeg");
+                    return File(image, "image/jpeg");
                 }
-                else if (tuple.imageType == ImageType.Png)
+                else if (imageType == ImageType.Png)
                 {
-                    return File(tuple.image, "image/png");
+                    return File(image, "image/png");
                 }
                 else
                 {
                     throw new SystemException(
                         "Image filetype not recognized by controller: " +
-                        $": {tuple.imageType}.");
+                        $": {imageType}.");
                 }
             }
             else
@@ -62,6 +63,26 @@ namespace CerealAPI.Controllers
             else
             {
                 return BadRequest();
+            }
+        }
+
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [HttpDelete(Name = "DeleteImageByCerealId")]
+        public async Task<IActionResult> DeleteImageByCerealId(
+            [FromQuery] int cerealId)
+        {
+            var result = await imageService.DeleteImageByCerealId(cerealId);
+
+            if (result != null)
+            {
+                return (bool)result ? NoContent() : BadRequest();
+            }
+            else
+            {
+                return NotFound();
             }
         }
     }
