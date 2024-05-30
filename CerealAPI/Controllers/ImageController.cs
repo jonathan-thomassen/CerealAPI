@@ -2,10 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 
 using CerealAPI.Services;
-using static System.Net.Mime.MediaTypeNames;
 using CerealAPI.Enums;
 using CerealAPI.Models;
-using System;
 
 namespace CerealAPI.Controllers
 {
@@ -49,34 +47,12 @@ namespace CerealAPI.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [HttpGet(Name = "PostImage")]
+        [HttpPost(Name = "PostImage")]
         public async Task<ActionResult<ImageEntry>> PostImage(
             [FromQuery] int cerealId,
-            [FromHeader(Name = "Content-Type")] string? contentType,
-            [FromBody] byte[] image)
+            [FromForm] IList<IFormFile> fileList)
         {
-            ImageType imageType;
-            if (contentType != null)
-            {
-                if (contentType == "image/png")
-                {
-                    imageType = ImageType.Png;
-                }
-                else if (contentType == "image/jpeg")
-                {
-                    imageType = ImageType.Jpeg;
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            } else
-            {
-                return BadRequest();
-            }
-
-            var newImage = await imageService.PostImage(
-                cerealId, imageType, image);
+            var newImage = await imageService.PostImage(cerealId, fileList);
 
             if (newImage != null)
             {

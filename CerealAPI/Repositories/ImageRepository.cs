@@ -9,7 +9,8 @@ namespace CerealAPI.Repositories
 
         public ImageEntry? GetImageEntryByCerealId(int cerealId)
         {
-            var imageEntry = _dbContext.Images.First(i => i.CerealId == cerealId);
+            var imageEntry = _dbContext.Images.First(
+                i => i.CerealId == cerealId);
 
             return imageEntry;
         }

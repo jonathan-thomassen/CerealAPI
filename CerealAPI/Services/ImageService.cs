@@ -2,10 +2,11 @@
 using CerealAPI.Models;
 using CerealAPI.Repositories;
 using System;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace CerealAPI.Services
 {
-    
+
     public class ImageService(IImageRepository repository) : IImageService
     {
         private const string PATH = "./Images/";
@@ -45,24 +46,28 @@ namespace CerealAPI.Services
         }
 
         public async Task<ImageEntry?> PostImage(
-            int cerealId, ImageType imageType, byte[] image)
+            int cerealId, IList<IFormFile> fileList)
         {
             string path = PATH + cerealId;
-            if (imageType == ImageType.Jpeg)
+
+            var file = fileList[0];
+            if (file.ContentType == "image/jpeg")
             {
                 path += ".jpg";
             }
-            else if (imageType == ImageType.Png)
+            else if (file.ContentType == "image/png")
             {
                 path += ".png";
-            } else
+            }
+            else
             {
-                throw new SystemException(
-                        "Image filetype was not recognized by ImageService: " +
-                        $"{imageType}.");
+                return null;
             }
 
-            await File.WriteAllBytesAsync(path, image);
+            using (var stream = File.Create(path))
+            {
+                await file.CopyToAsync(stream);
+            }
 
             var imageEntry = new ImageEntry(
                 Id: 0,

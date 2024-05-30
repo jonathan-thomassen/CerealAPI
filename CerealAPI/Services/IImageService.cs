@@ -8,7 +8,6 @@ namespace CerealAPI.Services
         Task<(byte[]? image, ImageType? imageType)>GetImageByCerealId(
             int cerealId);
 
-        Task<ImageEntry?> PostImage(
-            int cerealId, ImageType imageType, byte[] image)
+        Task<ImageEntry?> PostImage(int cerealId, IList<IFormFile> fileList);
     }
 }
