@@ -5,7 +5,7 @@ using CerealAPI.Repositories;
 namespace CerealAPI.Services
 {
     public class CerealService(
-        ICerealRepository repository, IImageRepository imageRepository) :
+        ICerealRepository cerealRepository, IImageRepository imageRepository) :
         ICerealService
     {
         public List<CerealProduct> GetCereal(
@@ -65,7 +65,7 @@ namespace CerealAPI.Services
             CerealProperty? sortBy = null,
             SortOrder sortOrder = SortOrder.Asc)
         {
-            List<CerealProduct> cereals = repository.GetAllCereal();
+            List<CerealProduct> cereals = cerealRepository.GetAllCereal();
 
             // TODO: Create some more functions here
             if (id != null)
@@ -258,7 +258,7 @@ namespace CerealAPI.Services
         }
         public async Task<CerealProduct?> PostCereal(CerealProduct cereal)
         {
-            var success = await repository.PostCereal(cereal);
+            var success = await cerealRepository.PostCereal(cereal);
 
             return success ? cereal : null;
         }
@@ -266,24 +266,24 @@ namespace CerealAPI.Services
         public async Task<(CerealProduct? cereal, bool existed)> UpdateCereal(
             CerealProduct newCereal)
         {
-            var oldCereal = await repository.GetCerealById(newCereal.Id);
+            var oldCereal = await cerealRepository.GetCerealById(newCereal.Id);
 
             if (oldCereal != null)
             {
-                var success = await repository.UpdateCereal(
+                var success = await cerealRepository.UpdateCereal(
                     oldCereal, newCereal);
                 return success ? (oldCereal, true) : (null, true);
             }
             else
             {
-                var success = await repository.PostCereal(newCereal);
+                var success = await cerealRepository.PostCereal(newCereal);
                 return success ? (newCereal, false) : (null, false);
             }
         }
 
         public async Task<bool?> DeleteCereal(int id)
         {
-            var cereal = await repository.GetCerealById(id);
+            var cereal = await cerealRepository.GetCerealById(id);
 
             // Delete soon-to-be orphan image file if it exists
             var imageEntry = await imageRepository.GetImageEntryByCerealId(id);
@@ -294,7 +294,7 @@ namespace CerealAPI.Services
 
             if (cereal != null)
             {
-                var success = await repository.DeleteCereal(cereal);
+                var success = await cerealRepository.DeleteCereal(cereal);
                 return success;
             }
             else
