@@ -70,12 +70,13 @@ namespace CerealAPI.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [HttpPut(Name = "UpdateImageEntry")]
-        public async Task<ActionResult<ImageEntry>> UpdateImageEntry(
-            [FromBody] ImageEntry oldImageEntry)
+        [HttpPut(Name = "UpdateImage")]
+        public async Task<ActionResult<ImageEntry>> UpdateImage(
+            [FromQuery] int cerealId,
+            [FromForm] IList<IFormFile> fileList)
         {
             var (newImageEntry, existed) =
-                await imageService.UpdateImageEntry(oldImageEntry);
+                await imageService.UpdateImage(cerealId, fileList);
 
             if (newImageEntry != null)
             {
@@ -85,7 +86,7 @@ namespace CerealAPI.Controllers
                 }
                 else
                 {
-                    return CreatedAtAction(nameof(UpdateImageEntry),
+                    return CreatedAtAction(nameof(UpdateImage),
                     new { id = newImageEntry.Id }, newImageEntry);
                 }
             }

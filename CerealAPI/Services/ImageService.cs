@@ -80,13 +80,41 @@ namespace CerealAPI.Services
         }
 
         public async Task<(ImageEntry? imageEntry, bool existed)>
-            UpdateImageEntry(ImageEntry newImageEntry)
+            UpdateImage(int cerealId, IList<IFormFile> fileList)
         {
-            var oldImageEntry = await repository.GetImageEntryById(
-                newImageEntry.Id);
+            var oldImageEntry =
+                await repository.GetImageEntryByCerealId(cerealId);
+
+            string path = PATH + cerealId;
+
+            var file = fileList[0];
+            if (file.ContentType == "image/jpeg")
+            {
+                path += ".jpg";
+            }
+            else if (file.ContentType == "image/png")
+            {
+                path += ".png";
+            }
+            else
+            {
+                return (null, oldImageEntry != null);
+            }
+
+            var newImageEntry = new ImageEntry(
+                Id: oldImageEntry.Id,
+                CerealId: cerealId,
+                Path: path);
 
             if (oldImageEntry != null)
             {
+                File.Delete(oldImageEntry.Path);
+
+                using (var stream = File.Create(path))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
                 var success = await repository.UpdateImageEntry(
                     oldImageEntry, newImageEntry);
                 return success ? (oldImageEntry, true) : (null, true);
