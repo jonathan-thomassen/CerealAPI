@@ -26,15 +26,21 @@ services.AddDbContext<CerealContext>(options =>
 {
     options.EnableSensitiveDataLogging();
 });
-services.AddDbContext<ApplicationDbContext>(options =>
+services.AddDbContext<ImageContext>(options =>
+{
+    options.EnableSensitiveDataLogging();
+});
+services.AddDbContext<UserContext>(options =>
 {
     options.UseInMemoryDatabase("AppDb");
 });
 services.AddAuthorization();
 services.AddIdentityApiEndpoints<IdentityUser>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddEntityFrameworkStores<UserContext>();
 services.AddTransient<ICerealRepository, CerealRepository>();
+services.AddTransient<IImageRepository, ImageRepository>();
 services.AddTransient<ICerealService, CerealService>();
+services.AddTransient<IImageService, ImageService>();
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
