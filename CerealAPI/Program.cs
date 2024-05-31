@@ -1,7 +1,6 @@
 using System.Text.Json.Serialization;
 
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 using CerealAPI.Contexts;
 using CerealAPI.Repositories;
@@ -22,25 +21,29 @@ controllers.AddJsonOptions(options =>
 
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
-services.AddDbContext<CerealContext>(options =>
-{
-    options.EnableSensitiveDataLogging();
-});
-services.AddDbContext<ImageContext>(options =>
-{
-    options.EnableSensitiveDataLogging();
-});
-services.AddDbContext<UserContext>(options =>
-{
-    options.UseInMemoryDatabase("AppDb");
-});
+
+services.AddDbContext<CerealContext>();
+services.AddDbContext<ImageContext>();
+services.AddDbContext<UserContext>();
+
 services.AddAuthorization();
-services.AddIdentityApiEndpoints<IdentityUser>()
+var idBuilder = services.AddIdentityApiEndpoints<IdentityUser>()
     .AddEntityFrameworkStores<UserContext>();
+
 services.AddTransient<ICerealRepository, CerealRepository>();
 services.AddTransient<IImageRepository, ImageRepository>();
 services.AddTransient<ICerealService, CerealService>();
 services.AddTransient<IImageService, ImageService>();
+
+services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequiredLength = 6;
+    options.Password.RequiredUniqueChars = 1;
+});
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
