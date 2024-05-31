@@ -35,7 +35,7 @@ namespace CerealAPITests
 
             #region Assert
             Assert.Equal(expected, actual);
-            #endregion            
+            #endregion
         }
     }
 }

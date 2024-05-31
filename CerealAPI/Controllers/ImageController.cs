@@ -19,7 +19,7 @@ namespace CerealAPI.Controllers
         public async Task<ActionResult<byte[]>> GetImageByCerealId(
             [FromQuery] int cerealId)
         {
-            var (image, imageType) =
+            (byte[] image, ImageType? imageType) =
                 await imageService.GetImageByCerealId(cerealId);
 
             if (image != null)
