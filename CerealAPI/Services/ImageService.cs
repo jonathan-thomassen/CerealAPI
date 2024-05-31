@@ -1,8 +1,6 @@
 ﻿using CerealAPI.Enums;
 using CerealAPI.Models;
 using CerealAPI.Repositories;
-using System;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace CerealAPI.Services
 {

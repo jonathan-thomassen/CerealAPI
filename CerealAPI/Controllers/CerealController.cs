@@ -9,7 +9,7 @@ namespace CerealAPI.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("[controller]")]
+    [Route("cereal")]
     public class CerealController(ICerealService cerealService) : ControllerBase
     {
         [AllowAnonymous]

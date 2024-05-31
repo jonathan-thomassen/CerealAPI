@@ -9,7 +9,7 @@ namespace CerealAPI.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("[controller]")]
+    [Route("image")]
     public class ImageController(IImageService imageService) : ControllerBase
     {
         [AllowAnonymous]

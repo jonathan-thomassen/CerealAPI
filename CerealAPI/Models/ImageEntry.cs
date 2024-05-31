@@ -3,5 +3,5 @@
     public record ImageEntry(
         int Id,
         int CerealId,
-        string Path);
+        string Path) : Dto(Id);
 }

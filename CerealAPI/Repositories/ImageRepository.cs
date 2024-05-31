@@ -1,6 +1,7 @@
-﻿using CerealAPI.Contexts;
+﻿using Microsoft.EntityFrameworkCore;
+
+using CerealAPI.Contexts;
 using CerealAPI.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace CerealAPI.Repositories
 {
