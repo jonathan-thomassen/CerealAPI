@@ -79,13 +79,13 @@ namespace CerealAPI.Services
             }
             if (manufacturer != null)
             {
-                var manufacturerId = manufacturer?.ToString()[0];
+                char? manufacturerId = manufacturer?.ToString()[0];
                 cereals = cereals.Where(c => c.Manufacturer == manufacturerId)
                     .ToList();
             }
             if (cerealType != null)
             {
-                var cerealTypeId = cerealType?.ToString()[0];
+                char? cerealTypeId = cerealType?.ToString()[0];
                 cereals = cereals.Where(c => c.CerealType == cerealTypeId)
                     .ToList();
             }
@@ -242,15 +242,15 @@ namespace CerealAPI.Services
             {
                 if (sortOrder == SortOrder.Asc)
                 {
-                    cereals = cereals.OrderBy(c => c
+                    cereals = [.. cereals.OrderBy(c => c
                         .GetType().GetProperty(sortBy.ToString())?
-                        .GetValue(c)).ToList();
+                        .GetValue(c))];
                 }
                 else
                 {
-                    cereals = cereals.OrderByDescending(c => c
+                    cereals = [.. cereals.OrderByDescending(c => c
                         .GetType().GetProperty(sortBy.ToString())?
-                        .GetValue(c)).ToList();
+                        .GetValue(c))];
                 }
 
                 return cereals;
@@ -258,7 +258,7 @@ namespace CerealAPI.Services
         }
         public async Task<CerealProduct?> PostCereal(CerealProduct cereal)
         {
-            var success = await cerealRepository.PostCereal(cereal);
+            bool success = await cerealRepository.PostCereal(cereal);
 
             return success ? cereal : null;
         }
@@ -266,27 +266,29 @@ namespace CerealAPI.Services
         public async Task<(CerealProduct? cereal, bool existed)> UpdateCereal(
             CerealProduct newCereal)
         {
-            var oldCereal = await cerealRepository.GetCerealById(newCereal.Id);
+            CerealProduct? oldCereal =
+                await cerealRepository.GetCerealById(newCereal.Id);
 
             if (oldCereal != null)
             {
-                var success = await cerealRepository.UpdateCereal(
+                bool success = await cerealRepository.UpdateCereal(
                     oldCereal, newCereal);
-                return success ? (oldCereal, true) : (null, true);
+                return success ? (newCereal, true) : (null, true);
             }
             else
             {
-                var success = await cerealRepository.PostCereal(newCereal);
+                bool success = await cerealRepository.PostCereal(newCereal);
                 return success ? (newCereal, false) : (null, false);
             }
         }
 
         public async Task<bool?> DeleteCereal(int id)
         {
-            var cereal = await cerealRepository.GetCerealById(id);
+            CerealProduct? cereal = await cerealRepository.GetCerealById(id);
 
             // Delete soon-to-be orphan image file if it exists
-            var imageEntry = await imageRepository.GetImageEntryByCerealId(id);
+            ImageEntry? imageEntry =
+                await imageRepository.GetImageEntryByCerealId(id);
             if (imageEntry != null)
             {
                 File.Delete(imageEntry.Path);
@@ -294,7 +296,7 @@ namespace CerealAPI.Services
 
             if (cereal != null)
             {
-                var success = await cerealRepository.DeleteCereal(cereal);
+                bool success = await cerealRepository.DeleteCereal(cereal);
                 return success;
             }
             else

@@ -73,7 +73,7 @@ namespace CerealAPI.Controllers
             [FromQuery] CerealProperty? sortBy,
             [FromQuery] SortOrder sortOrder = SortOrder.Asc)
         {
-            var cereals = cerealService.GetCereal(
+            List<CerealProduct> cereals = cerealService.GetCereal(
                 id,
                 name,
                 manufacturer,
@@ -143,7 +143,7 @@ namespace CerealAPI.Controllers
         public async Task<ActionResult<CerealProduct>> PostCereal(
             [FromBody] CerealProduct cereal)
         {
-            var newCereal = await cerealService.PostCereal(cereal);
+            CerealProduct? newCereal = await cerealService.PostCereal(cereal);
 
             if (newCereal != null)
             {
@@ -164,7 +164,7 @@ namespace CerealAPI.Controllers
         public async Task<ActionResult<CerealProduct>> UpdateCereal(
             [FromBody] CerealProduct oldCereal)
         {
-            var (newCereal, existed) =
+            (CerealProduct? newCereal, bool existed) =
                 await cerealService.UpdateCereal(oldCereal);
 
             if (newCereal != null)
@@ -192,7 +192,7 @@ namespace CerealAPI.Controllers
         [HttpDelete(Name = "DeleteCerealProduct")]
         public async Task<IActionResult> DeleteCereal([FromQuery] int id)
         {
-            var result = await cerealService.DeleteCereal(id);
+            bool? result = await cerealService.DeleteCereal(id);
 
             if (result != null)
             {

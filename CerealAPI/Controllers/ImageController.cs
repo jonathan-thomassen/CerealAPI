@@ -19,7 +19,7 @@ namespace CerealAPI.Controllers
         public async Task<ActionResult<byte[]>> GetImageByCerealId(
             [FromQuery] int cerealId)
         {
-            (byte[] image, ImageType? imageType) =
+            (byte[]? image, ImageType? imageType) =
                 await imageService.GetImageByCerealId(cerealId);
 
             if (image != null)
@@ -53,7 +53,8 @@ namespace CerealAPI.Controllers
             [FromQuery] int cerealId,
             [FromForm] IList<IFormFile> fileList)
         {
-            var newImage = await imageService.PostImage(cerealId, fileList);
+            ImageEntry? newImage =
+                await imageService.PostImage(cerealId, fileList);
 
             if (newImage != null)
             {
@@ -75,7 +76,7 @@ namespace CerealAPI.Controllers
             [FromQuery] int cerealId,
             [FromForm] IList<IFormFile> fileList)
         {
-            var (newImageEntry, existed) =
+            (ImageEntry? newImageEntry, bool existed) =
                 await imageService.UpdateImage(cerealId, fileList);
 
             if (newImageEntry != null)
@@ -104,7 +105,7 @@ namespace CerealAPI.Controllers
         public async Task<IActionResult> DeleteImageByCerealId(
             [FromQuery] int cerealId)
         {
-            var result = await imageService.DeleteImageByCerealId(cerealId);
+            bool? result = await imageService.DeleteImageByCerealId(cerealId);
 
             if (result != null)
             {

@@ -6,12 +6,12 @@ using CerealAPI.Contexts;
 using CerealAPI.Repositories;
 using CerealAPI.Services;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var services = builder.Services;
+IServiceCollection services = builder.Services;
 
-var controllers = services.AddControllers();
+IMvcBuilder controllers = services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at
 // https://aka.ms/aspnetcore/swashbuckle
 controllers.AddJsonOptions(options =>
@@ -27,7 +27,7 @@ services.AddDbContext<ImageContext>();
 services.AddDbContext<UserContext>();
 
 services.AddAuthorization();
-var idBuilder = services.AddIdentityApiEndpoints<IdentityUser>()
+IdentityBuilder idBuilder = services.AddIdentityApiEndpoints<IdentityUser>()
     .AddEntityFrameworkStores<UserContext>();
 
 services.AddTransient<ICerealRepository, CerealRepository>();
@@ -45,7 +45,7 @@ services.Configure<IdentityOptions>(options =>
     options.Password.RequiredUniqueChars = 1;
 });
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

@@ -12,7 +12,8 @@ namespace CerealAPI.Services
         public async Task<(byte[]? image, ImageType? imageType)>
             GetImageByCerealId(int cerealId)
         {
-            var imageEntry = await repository.GetImageEntryByCerealId(cerealId);
+            ImageEntry? imageEntry =
+                await repository.GetImageEntryByCerealId(cerealId);
 
             if (imageEntry != null)
             {
@@ -48,7 +49,7 @@ namespace CerealAPI.Services
         {
             string path = PATH + cerealId;
 
-            var file = fileList[0];
+            IFormFile file = fileList[0];
             if (file.ContentType == "image/jpeg")
             {
                 path += ".jpg";
@@ -62,7 +63,7 @@ namespace CerealAPI.Services
                 return null;
             }
 
-            using (var stream = File.Create(path))
+            using (FileStream stream = File.Create(path))
             {
                 await file.CopyToAsync(stream);
             }
@@ -72,7 +73,7 @@ namespace CerealAPI.Services
                 CerealId: cerealId,
                 Path: path);
 
-            var success = await repository.PostImageEntry(imageEntry);
+            bool success = await repository.PostImageEntry(imageEntry);
 
             return success ? imageEntry : null;
         }
@@ -80,12 +81,12 @@ namespace CerealAPI.Services
         public async Task<(ImageEntry? imageEntry, bool existed)>
             UpdateImage(int cerealId, IList<IFormFile> fileList)
         {
-            var oldImageEntry =
+            ImageEntry? oldImageEntry =
                 await repository.GetImageEntryByCerealId(cerealId);
 
             string path = PATH + cerealId;
 
-            var file = fileList[0];
+            IFormFile file = fileList[0];
             if (file.ContentType == "image/jpeg")
             {
                 path += ".jpg";
@@ -108,31 +109,31 @@ namespace CerealAPI.Services
             {
                 File.Delete(oldImageEntry.Path);
 
-                using (var stream = File.Create(path))
+                using (FileStream stream = File.Create(path))
                 {
                     await file.CopyToAsync(stream);
                 }
 
-                var success = await repository.UpdateImageEntry(
+                bool success = await repository.UpdateImageEntry(
                     oldImageEntry, newImageEntry);
                 return success ? (oldImageEntry, true) : (null, true);
             }
             else
             {
-                var success = await repository.PostImageEntry(newImageEntry);
+                bool success = await repository.PostImageEntry(newImageEntry);
                 return success ? (newImageEntry, false) : (null, false);
             }
         }
 
         public async Task<bool?> DeleteImageByCerealId(int cerealId)
         {
-            var imageEntry = await repository.GetImageEntryByCerealId(cerealId);
+            ImageEntry? imageEntry = await repository.GetImageEntryByCerealId(cerealId);
 
             if (imageEntry != null)
             {
                 File.Delete(imageEntry.Path);
 
-                var success = await repository.DeleteImageEntry(imageEntry);
+                bool success = await repository.DeleteImageEntry(imageEntry);
                 return success;
             }
             else
