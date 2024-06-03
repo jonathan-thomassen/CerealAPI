@@ -3,7 +3,7 @@ using CerealAPI.Repositories;
 using CerealAPI.Services;
 using Moq;
 
-namespace CerealAPITests
+namespace CerealAPITests.Services
 {
     public class CerealServiceTests
     {
@@ -22,8 +22,7 @@ namespace CerealAPITests
             var lessAwesomeCereal = new CerealProduct(
                 11, "Less Awesome Cereal", 'Q', 'C', 20, 20, 10,
                 20, 20, 20, 20, 20, 20, 2, 120, 20, 22);
-            List<CerealProduct> cerealList =
-                [awesomeCereal, lessAwesomeCereal];
+            List<CerealProduct> cerealList = [awesomeCereal, lessAwesomeCereal];
 
             List<CerealProduct> expected =
                 [awesomeCereal, lessAwesomeCereal];
@@ -59,11 +58,8 @@ namespace CerealAPITests
 
             var cerealRepository =
                 new Mock<ICerealRepository>(MockBehavior.Strict);
-
-            var trueResult = Task.FromResult(true);
-
             cerealRepository.Setup(
-                x => x.PostCereal(awesomeCereal)).Returns(trueResult);
+                x => x.PostCereal(awesomeCereal)).ReturnsAsync(true);
 
             var imageRepository =
                 new Mock<IImageRepository>(MockBehavior.Strict);
@@ -82,30 +78,26 @@ namespace CerealAPITests
         }
 
         [Fact]
-        public async void PutCerealProduct()
+        public async void UpdateCerealProduct()
         {
             #region Arrange
             var awesomeCereal = new CerealProduct(
                 10, "Awesome Cereal", 'C', 'H', 20, 20, 10,
                 20, 20, 20, 20, 20, 20, 2, 120, 20, 99);
             var awesomerCereal = new CerealProduct(
-                10, "Awesome Cereal", 'C', 'H', 20, 20, 10,
+                10, "Awesomer Cereal", 'C', 'H', 20, 20, 10,
                 20, 20, 20, 20, 20, 20, 2, 120, 20, 100);
 
             (CerealProduct?, bool) expected = (awesomerCereal, true);
 
             var cerealRepository =
                 new Mock<ICerealRepository>(MockBehavior.Strict);
-
-            var trueResult = Task.FromResult(true);
-            var cerealResult = Task.FromResult((CerealProduct?)awesomeCereal);
-
             cerealRepository.Setup(
                 x => x.UpdateCereal(awesomeCereal, awesomerCereal)
-                ).Returns(trueResult);
+                ).ReturnsAsync(true);
             cerealRepository.Setup(
                 x => x.GetCerealById(awesomeCereal.Id)
-                ).Returns(cerealResult);
+                ).ReturnsAsync(awesomeCereal);
 
             var imageRepository =
                 new Mock<IImageRepository>(MockBehavior.Strict);
@@ -138,21 +130,17 @@ namespace CerealAPITests
 
             var cerealRepository =
                 new Mock<ICerealRepository>(MockBehavior.Strict);
-            var imageRepository =
-                new Mock<IImageRepository>(MockBehavior.Strict);
-
-            var cerealResult = Task.FromResult((CerealProduct?)cerealThatSucks);
-            var imageResult = Task.FromResult((ImageEntry?)image);
-            var trueResult = Task.FromResult(true);
-
             cerealRepository.Setup(
                 x => x.GetCerealById(cerealThatSucks.Id))
-                .Returns(cerealResult);
+                .ReturnsAsync(cerealThatSucks);
+            cerealRepository.Setup(
+                x => x.DeleteCereal(cerealThatSucks)).ReturnsAsync(true);
+
+            var imageRepository =
+                new Mock<IImageRepository>(MockBehavior.Strict);            
             imageRepository.Setup(
                 x => x.GetImageEntryByCerealId(cerealThatSucks.Id))
-                .Returns(imageResult);
-            cerealRepository.Setup(
-                x => x.DeleteCereal(cerealThatSucks)).Returns(trueResult);
+                .ReturnsAsync(image);            
 
             CerealService service =
                 GetService(cerealRepository, imageRepository);

@@ -16,7 +16,7 @@ namespace CerealAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet(Name = "GetImageByCerealId")]
-        public async Task<ActionResult<byte[]>> GetImageByCerealId(
+        public async Task<IActionResult> GetImageByCerealId(
             [FromQuery] int cerealId)
         {
             (byte[]? image, ImageType? imageType) =
@@ -49,7 +49,7 @@ namespace CerealAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpPost(Name = "PostImage")]
-        public async Task<ActionResult<ImageEntry>> PostImage(
+        public async Task<IActionResult> PostImage(
             [FromQuery] int cerealId,
             [FromForm] IList<IFormFile> fileList)
         {
@@ -72,7 +72,7 @@ namespace CerealAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpPut(Name = "UpdateImage")]
-        public async Task<ActionResult<ImageEntry>> UpdateImage(
+        public async Task<IActionResult> UpdateImage(
             [FromQuery] int cerealId,
             [FromForm] IList<IFormFile> fileList)
         {

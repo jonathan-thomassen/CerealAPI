@@ -16,61 +16,61 @@ namespace CerealAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet(Name = "GetCerealProducts")]
-        public ActionResult<List<CerealProduct>> GetCereal(
-            [FromQuery] int? id,
-            [FromQuery] string? name,
-            [FromQuery] Manufacturer? manufacturer,
-            [FromQuery] CerealType? cerealType,
-            [FromQuery] short? minCalories,
-            [FromQuery] bool? minCalIncl,
-            [FromQuery] short? maxCalories,
-            [FromQuery] bool? maxCalIncl,
-            [FromQuery] byte? minProtein,
-            [FromQuery] bool? minProIncl,
-            [FromQuery] byte? maxProtein,
-            [FromQuery] bool? maxProIncl,
-            [FromQuery] byte? minFat,
-            [FromQuery] bool? minFatIncl,
-            [FromQuery] byte? maxFat,
-            [FromQuery] bool? maxFatIncl,
-            [FromQuery] short? minSodium,
-            [FromQuery] bool? minSodIncl,
-            [FromQuery] short? maxSodium,
-            [FromQuery] bool? maxSodIncl,
-            [FromQuery] double? minFiber,
-            [FromQuery] bool? minFibIncl,
-            [FromQuery] double? maxFiber,
-            [FromQuery] bool? maxFibIncl,
-            [FromQuery] double? minCarbohydrates,
-            [FromQuery] bool? minCarbIncl,
-            [FromQuery] double? maxCarbohydrates,
-            [FromQuery] bool? maxCarbIncl,
-            [FromQuery] short? minSugars,
-            [FromQuery] bool? minSugIncl,
-            [FromQuery] short? maxSugars,
-            [FromQuery] bool? maxSugIncl,
-            [FromQuery] short? minPotassium,
-            [FromQuery] bool? minPotIncl,
-            [FromQuery] short? maxPotassium,
-            [FromQuery] bool? maxPotIncl,
-            [FromQuery] short? minVitamins,
-            [FromQuery] bool? minVitIncl,
-            [FromQuery] short? maxVitamins,
-            [FromQuery] bool? maxVitIncl,
-            [FromQuery] double? minWeight,
-            [FromQuery] bool? minWeightIncl,
-            [FromQuery] double? maxWeight,
-            [FromQuery] bool? maxWeightIncl,
-            [FromQuery] double? minCups,
-            [FromQuery] bool? minCupsIncl,
-            [FromQuery] double? maxCups,
-            [FromQuery] bool? maxCupsIncl,
-            [FromQuery] double? minRating,
-            [FromQuery] bool? minRatingIncl,
-            [FromQuery] double? maxRating,
-            [FromQuery] bool? maxRatingIncl,
-            [FromQuery] byte? shelf,
-            [FromQuery] CerealProperty? sortBy,
+        public IActionResult GetCereal(
+            [FromQuery] int? id = null,
+            [FromQuery] string? name = null,
+            [FromQuery] Manufacturer? manufacturer = null,
+            [FromQuery] CerealType? cerealType = null,
+            [FromQuery] short? minCalories = null,
+            [FromQuery] bool? minCalIncl = null,
+            [FromQuery] short? maxCalories = null,
+            [FromQuery] bool? maxCalIncl = null,
+            [FromQuery] byte? minProtein = null,
+            [FromQuery] bool? minProIncl = null,
+            [FromQuery] byte? maxProtein = null,
+            [FromQuery] bool? maxProIncl = null,
+            [FromQuery] byte? minFat = null,
+            [FromQuery] bool? minFatIncl = null,
+            [FromQuery] byte? maxFat = null,
+            [FromQuery] bool? maxFatIncl = null,
+            [FromQuery] short? minSodium = null,
+            [FromQuery] bool? minSodIncl = null,
+            [FromQuery] short? maxSodium = null,
+            [FromQuery] bool? maxSodIncl = null,
+            [FromQuery] double? minFiber = null,
+            [FromQuery] bool? minFibIncl = null,
+            [FromQuery] double? maxFiber = null,
+            [FromQuery] bool? maxFibIncl = null,
+            [FromQuery] double? minCarbohydrates = null,
+            [FromQuery] bool? minCarbIncl = null,
+            [FromQuery] double? maxCarbohydrates = null,
+            [FromQuery] bool? maxCarbIncl = null,
+            [FromQuery] short? minSugars = null,
+            [FromQuery] bool? minSugIncl = null,
+            [FromQuery] short? maxSugars = null,
+            [FromQuery] bool? maxSugIncl = null,
+            [FromQuery] short? minPotassium = null,
+            [FromQuery] bool? minPotIncl = null,
+            [FromQuery] short? maxPotassium = null,
+            [FromQuery] bool? maxPotIncl = null,
+            [FromQuery] short? minVitamins = null,
+            [FromQuery] bool? minVitIncl = null,
+            [FromQuery] short? maxVitamins = null,
+            [FromQuery] bool? maxVitIncl = null,
+            [FromQuery] double? minWeight = null,
+            [FromQuery] bool? minWeightIncl = null,
+            [FromQuery] double? maxWeight = null,
+            [FromQuery] bool? maxWeightIncl = null,
+            [FromQuery] double? minCups = null,
+            [FromQuery] bool? minCupsIncl = null,
+            [FromQuery] double? maxCups = null,
+            [FromQuery] bool? maxCupsIncl = null,
+            [FromQuery] double? minRating = null,
+            [FromQuery] bool? minRatingIncl = null,
+            [FromQuery] double? maxRating = null,
+            [FromQuery] bool? maxRatingIncl = null,
+            [FromQuery] byte? shelf = null,
+            [FromQuery] CerealProperty? sortBy = null,
             [FromQuery] SortOrder sortOrder = SortOrder.Asc)
         {
             List<CerealProduct> cereals = cerealService.GetCereal(
@@ -140,7 +140,7 @@ namespace CerealAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpPost(Name = "PostNewCerealProduct")]
-        public async Task<ActionResult<CerealProduct>> PostCereal(
+        public async Task<IActionResult> PostCereal(
             [FromBody] CerealProduct cereal)
         {
             CerealProduct? newCereal = await cerealService.PostCereal(cereal);
@@ -161,11 +161,11 @@ namespace CerealAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpPut(Name = "UpdateCerealProduct")]
-        public async Task<ActionResult<CerealProduct>> UpdateCereal(
-            [FromBody] CerealProduct oldCereal)
+        public async Task<IActionResult> UpdateCereal(
+            [FromBody] CerealProduct updatedCereal)
         {
             (CerealProduct? newCereal, bool existed) =
-                await cerealService.UpdateCereal(oldCereal);
+                await cerealService.UpdateCereal(updatedCereal);
 
             if (newCereal != null)
             {
