@@ -131,7 +131,10 @@ namespace CerealAPI.Services
 
             if (imageEntry != null)
             {
-                File.Delete(imageEntry.Path);
+                if (File.Exists(imageEntry.Path))
+                {
+                    File.Delete(imageEntry.Path);
+                }
 
                 bool success = await repository.DeleteImageEntry(imageEntry);
                 return success;

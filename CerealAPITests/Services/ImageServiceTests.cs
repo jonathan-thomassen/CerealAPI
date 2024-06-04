@@ -88,5 +88,86 @@ namespace CerealAPITests.Services
             }
             #endregion
         }
+
+        [Fact]
+        public async void UpdateImage()
+        {
+            #region Arrange
+            var oldImageEntry = new ImageEntry(0, 10, "./Images/10.jpg");
+            var newImageEntry = new ImageEntry(0, 10, "./Images/10.jpg");
+
+            (ImageEntry?, bool) expected = (newImageEntry, true);
+
+            var imageRepository =
+                new Mock<IImageRepository>(MockBehavior.Strict);
+            imageRepository.Setup(
+                x => x.GetImageEntryByCerealId(oldImageEntry.CerealId)
+                ).ReturnsAsync(oldImageEntry);
+            imageRepository.Setup(
+                x => x.UpdateImageEntry(oldImageEntry, newImageEntry)
+                ).ReturnsAsync(true);
+
+            string filename = oldImageEntry.Path.Split("/").Last();
+            string name = filename.Split(".")[0];
+
+            FileStream stream = File.OpenRead("../../../Images/TestUpd.png");
+
+            FormFile formFile =
+                new FormFile(stream, 0, stream.Length, name, filename)
+                {
+                    Headers = new HeaderDictionary(),
+                    ContentType = "image/png"
+                };
+
+            ImageService service = GetService(imageRepository);
+            #endregion
+
+            #region Act
+            (ImageEntry?, bool) actual =
+                await service.UpdateImage(oldImageEntry.CerealId, [formFile]);
+            #endregion
+
+            #region Assert
+            Assert.Equal(expected, actual);
+            #endregion
+
+            #region Cleanup
+            if (File.Exists(newImageEntry.Path))
+            {
+                File.Delete(newImageEntry.Path);
+            }
+            #endregion
+        }
+
+        [Fact]
+        public async void DeleteImage()
+        {
+            #region Arrange
+            var imageEntry = new ImageEntry(1, 10, "null");
+
+            bool? expected = true;
+
+            var imageRepository =
+                new Mock<IImageRepository>(MockBehavior.Strict);
+            imageRepository.Setup(
+                x => x.GetImageEntryByCerealId(imageEntry.CerealId))
+                .ReturnsAsync(imageEntry);
+            imageRepository.Setup(
+                x => x.DeleteImageEntry(imageEntry))
+                .ReturnsAsync(true);
+
+            ImageService service =
+                GetService(imageRepository);
+            #endregion
+
+            #region Act
+            bool? actual =
+                await service.DeleteImageByCerealId(imageEntry.CerealId);
+            #endregion
+
+            #region Assert
+            Assert.Equal(expected, actual);
+            #endregion
+        }
     }
 }
