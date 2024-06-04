@@ -39,7 +39,7 @@ namespace CerealAPI.Repositories
         {
             CerealProduct? cereal = Get(x => x.Id == id)
                 .FirstOrDefault() ?? throw new SystemException(
-                    $"Cereal does not exists with id {id}.");
+                    $"Cereal does not exist with id {id}.");
 
             return Task.FromResult<CerealProduct?>(cereal);
         }
