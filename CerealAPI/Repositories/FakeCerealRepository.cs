@@ -7,11 +7,11 @@ namespace CerealAPI.Repositories
 {
     public class FakeCerealRepository : FakeDatabase<CerealProduct>, ICerealRepository
     {
-        private static readonly object _lock = new();
+        private static readonly object s_lock = new();
 
         public Task<bool> PostCereal(CerealProduct cereal)
         {
-            lock (_lock)
+            lock (s_lock)
             {
                 if (Get(x => x.Id == cereal.Id).Any())
                     throw new SystemException(
@@ -41,14 +41,14 @@ namespace CerealAPI.Repositories
                 .FirstOrDefault() ?? throw new SystemException(
                     $"Cereal does not exists with id {id}.");
 
-            return Task.FromResult(cereal);
+            return Task.FromResult<CerealProduct?>(cereal);
         }
 
         public Task<bool> UpdateCereal(CerealProduct oldCereal, CerealProduct newCereal)
         {
-            lock (_lock)
+            lock (s_lock)
             {
-                if (Get(x => x.Id == oldCereal.Id).Count() == 0)
+                if (!Get(x => x.Id == oldCereal.Id).Any())
                     throw new SystemException($"No cereal exists with id {oldCereal.Id}.");
 
                 Update(oldCereal, oldCereal.Id);

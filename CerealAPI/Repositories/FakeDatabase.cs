@@ -6,29 +6,29 @@ namespace CerealAPI.Repositories
 {
     public abstract class FakeDatabase<T> where T : Dto
     {
-        private static readonly ConcurrentDictionary<int, T> _dictionary = new();
-        private static int _currentId = 1;
-        private readonly static object _idLock = new();
+        private static readonly ConcurrentDictionary<int, T> s_dictionary = new();
+        private static int s_currentId = 1;
+        private static readonly object s_idLock = new();
 
         protected int Insert(T item)
         {
-            var id = GetNextId();
-            _dictionary[id] = item with { Id = id };
+            int id = GetNextId();
+            s_dictionary[id] = item with { Id = id };
 
             return id;
         }
 
         protected T? Get(int id) =>
-            _dictionary.TryGetValue(id, out var value) ? value : null;
+            s_dictionary.TryGetValue(id, out T? value) ? value : null;
 
         protected IEnumerable<T> Get(Func<T, bool> pickItems) =>
-            _dictionary.Values.Where(pickItems);
+            s_dictionary.Values.Where(pickItems);
 
         protected void Update(T item, int id)
         {
-            if (_dictionary.ContainsKey(id))
+            if (s_dictionary.ContainsKey(id))
             {
-                _dictionary[id] = item with { Id = id };
+                s_dictionary[id] = item with { Id = id };
             }
             else
             {
@@ -38,15 +38,15 @@ namespace CerealAPI.Repositories
 
         protected void Delete(int id)
         {
-            _dictionary.TryRemove(id, out var _);
+            s_dictionary.TryRemove(id, out T? _);
         }
 
         private static int GetNextId()
         {
             int id;
-            lock (_idLock)
+            lock (s_idLock)
             {
-                id = _currentId++;
+                id = s_currentId++;
             }
 
             return id;

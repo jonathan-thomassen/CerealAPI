@@ -6,7 +6,7 @@ namespace PizzaPlace.Test.Repositories;
 
 public class CerealRepositoryTests
 {
-    private static ICerealRepository GetCerealRepository() => new FakeCerealRepository();
+    private static FakeCerealRepository GetCerealRepository() => new();
 
     [Fact]
     public async Task AddCerealProduct()
@@ -30,7 +30,7 @@ public class CerealRepositoryTests
             10.0,
             10.0,
             10.0);
-        ICerealRepository repository = GetCerealRepository();
+        FakeCerealRepository repository = GetCerealRepository();
         #endregion
 
         #region Act
@@ -65,11 +65,11 @@ public class CerealRepositoryTests
             10.0,
             10.0,
             10.0);
-        var repository = GetCerealRepository();
+        FakeCerealRepository repository = GetCerealRepository();
         #endregion
 
         #region Act
-        var actual = await repository.GetCerealById(expected.Id);
+        CerealProduct? actual = await repository.GetCerealById(expected.Id);
         #endregion
 
         #region Assert
@@ -82,7 +82,7 @@ public class CerealRepositoryTests
     {
         #region Arrange
         int erronousId = 1111;
-        var repository = GetCerealRepository();
+        FakeCerealRepository repository = GetCerealRepository();
         #endregion
 
         #region Act
