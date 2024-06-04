@@ -116,7 +116,7 @@ namespace CerealAPI.Services
 
                 bool success = await repository.UpdateImageEntry(
                     oldImageEntry, newImageEntry);
-                return success ? (oldImageEntry, true) : (null, true);
+                return success ? (newImageEntry, true) : (null, true);
             }
             else
             {

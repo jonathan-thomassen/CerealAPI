@@ -31,18 +31,15 @@ namespace CerealAPITests.Controllers
             #endregion
 
             #region Assert
-            Assert.IsType<OkObjectResult>(actual);
+            Assert.IsType<FileContentResult>(actual);
             imageService.VerifyAll();
-            var returnedImageTuple =
-                (actual as OkObjectResult)?.Value as (byte[]? image, ImageType? imageType)?;
-
-            Assert.NotNull(returnedImageTuple);
-
-            byte[]? returnedImage = returnedImageTuple.Value.image;
-            ImageType? returnedImageType = returnedImageTuple.Value.imageType;
+            var returnedImage =
+                (actual as FileContentResult)?.FileContents as byte[];
+            var returnedImageType =
+                (actual as FileContentResult)?.ContentType as string;
 
             Assert.Equal(image, returnedImage);
-            Assert.Equal(ImageType.Jpeg, returnedImageType);
+            Assert.Equal("image/jpeg", returnedImageType);
             #endregion
         }
 

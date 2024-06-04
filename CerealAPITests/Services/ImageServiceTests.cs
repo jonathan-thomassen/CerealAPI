@@ -94,7 +94,7 @@ namespace CerealAPITests.Services
         {
             #region Arrange
             var oldImageEntry = new ImageEntry(0, 10, "./Images/10.jpg");
-            var newImageEntry = new ImageEntry(0, 10, "./Images/10.jpg");
+            var newImageEntry = new ImageEntry(0, 10, "./Images/10.png");
 
             (ImageEntry?, bool) expected = (newImageEntry, true);
 
@@ -107,10 +107,9 @@ namespace CerealAPITests.Services
                 x => x.UpdateImageEntry(oldImageEntry, newImageEntry)
                 ).ReturnsAsync(true);
 
-            string filename = oldImageEntry.Path.Split("/").Last();
-            string name = filename.Split(".")[0];
-
             FileStream stream = File.OpenRead("../../../Images/TestUpd.png");
+            string filename = stream.Name.Split("\\").Last();
+            string name = filename.Split(".")[0];
 
             FormFile formFile =
                 new FormFile(stream, 0, stream.Length, name, filename)
