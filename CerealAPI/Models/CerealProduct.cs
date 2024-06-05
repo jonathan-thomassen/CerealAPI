@@ -17,5 +17,5 @@
         byte Shelf,
         double Weight,
         double Cups,
-        double Rating) : Dto(Id);
+        double Rating);
 }

@@ -5,7 +5,7 @@ namespace CerealAPI.Repositories
     public interface ICerealRepository
     {
         Task<CerealProduct?> GetCerealById(int id);
-        List<CerealProduct> GetAllCereal();
+        Task<List<CerealProduct>> GetAllCereal();
         Task<bool> PostCereal(CerealProduct cereal);
         Task<bool> UpdateCereal(
             CerealProduct oldCereal, CerealProduct newCereal);

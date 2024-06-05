@@ -16,7 +16,7 @@ namespace CerealAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet(Name = "GetCerealProducts")]
-        public IActionResult GetCereal(
+        public async Task<IActionResult> GetCereal(
             [FromQuery] int? id = null,
             [FromQuery] string? name = null,
             [FromQuery] Manufacturer? manufacturer = null,
@@ -73,7 +73,7 @@ namespace CerealAPI.Controllers
             [FromQuery] CerealProperty? sortBy = null,
             [FromQuery] SortOrder sortOrder = SortOrder.Asc)
         {
-            List<CerealProduct> cereals = cerealService.GetCereal(
+            List<CerealProduct> cereals = await cerealService.GetCereal(
                 id,
                 name,
                 manufacturer,

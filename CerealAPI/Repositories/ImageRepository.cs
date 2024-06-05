@@ -7,28 +7,29 @@ namespace CerealAPI.Repositories
 {
     public class ImageRepository : IImageRepository
     {
-        private static readonly ImageContext _dbContext = new();
+        private static readonly ImageContext s_dbContext = new();
+        private static readonly object s_lock = new();
 
         public async Task<ImageEntry?> GetImageEntryById(int id)
         {
-            var imageEntry = await _dbContext.Images.FirstOrDefaultAsync(
-                i => i.Id == id);
+            ImageEntry? imageEntry =
+                await s_dbContext.Images.FirstOrDefaultAsync(i => i.Id == id);
 
             return imageEntry;
         }
 
         public async Task<ImageEntry?> GetImageEntryByCerealId(int cerealId)
         {
-            var imageEntry = await  _dbContext.Images.FirstOrDefaultAsync(
-                i => i.CerealId == cerealId);
+            ImageEntry? imageEntry = await s_dbContext.Images
+                .FirstOrDefaultAsync(i => i.CerealId == cerealId);
 
             return imageEntry;
         }
 
         public async Task<bool> PostImageEntry(ImageEntry entry)
         {
-            _dbContext.Add(entry);
-            var result = await _dbContext.SaveChangesAsync();
+            await s_dbContext.AddAsync(entry);
+            int result = await s_dbContext.SaveChangesAsync();
 
             return result > 0;
         }
@@ -36,17 +37,23 @@ namespace CerealAPI.Repositories
         public async Task<bool> UpdateImageEntry(
             ImageEntry oldImageEntry, ImageEntry newImageEntry)
         {
-            _dbContext.Entry(oldImageEntry).CurrentValues
+            lock (s_lock)
+            {
+                s_dbContext.Entry(oldImageEntry).CurrentValues
                 .SetValues(newImageEntry);
-            var result = await _dbContext.SaveChangesAsync();
+            }
+            int result = await s_dbContext.SaveChangesAsync();
 
             return result > 0;
         }
 
         public async Task<bool> DeleteImageEntry(ImageEntry entry)
         {
-            _dbContext.Remove(entry);
-            var result = await _dbContext.SaveChangesAsync();
+            lock (s_lock)
+            {
+                s_dbContext.Remove(entry);
+            }
+            int result = await s_dbContext.SaveChangesAsync();
 
             return result > 0;
         }

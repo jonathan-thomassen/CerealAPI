@@ -1,19 +1,18 @@
-﻿
-using CerealAPI.Models;
+﻿using CerealAPI.Models;
 using CerealAPI.Repositories;
 
 namespace CerealAPITests.Repositories
 {
     public class ImageRepositoryTests
     {
-        private static FakeImageRepository GetImageRepository() => new();
+        private static ImageRepository GetImageRepository() => new();
 
         [Fact]
         public async Task AddImageEntry()
         {
             #region Arrange
-            var imageEntry = new ImageEntry(10, 10, "null");
-            FakeImageRepository repository = GetImageRepository();
+            var imageEntry = new ImageEntry(0, 7204, "null");
+            ImageRepository repository = GetImageRepository();
             #endregion
 
             #region Act
@@ -23,23 +22,32 @@ namespace CerealAPITests.Repositories
             #region Assert
             Assert.True(actual);
             #endregion
+
+            #region Cleanup
+            await repository.DeleteImageEntry(imageEntry);
+            #endregion
         }
 
         [Fact]
         public async Task GetImageEntryById()
         {
             #region Arrange
-            await AddImageEntry();
-            var expected = new ImageEntry(1, 10, "null");
-            FakeImageRepository repository = GetImageRepository();
+            var imageEntry = new ImageEntry(0, 7204, "null");
+            ImageRepository repository = GetImageRepository();
+            await repository.PostImageEntry(imageEntry);
             #endregion
 
             #region Act
-            ImageEntry? actual = await repository.GetImageEntryById(expected.Id);
+            ImageEntry? actual =
+                await repository.GetImageEntryById(imageEntry.Id);
             #endregion
 
             #region Assert
-            Assert.Equal(expected, actual);
+            Assert.Equal(imageEntry, actual);
+            #endregion
+
+            #region Cleanup
+            await repository.DeleteImageEntry(imageEntry);
             #endregion
         }
 
@@ -48,17 +56,15 @@ namespace CerealAPITests.Repositories
         {
             #region Arrange
             int erronousId = 1111;
-            FakeImageRepository repository = GetImageRepository();
+            ImageRepository repository = GetImageRepository();
             #endregion
 
             #region Act
-            SystemException ex = await Assert.ThrowsAsync<SystemException>(
-                () => repository.GetImageEntryById(erronousId));
+            ImageEntry? actual = await repository.GetImageEntryById(erronousId);
             #endregion
 
             #region Assert
-            Assert.Equal($"Image entry does not exist with id {erronousId}.",
-                ex.Message);
+            Assert.Null(actual);
             #endregion
         }
     }

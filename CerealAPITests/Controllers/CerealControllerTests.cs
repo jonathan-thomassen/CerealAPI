@@ -14,7 +14,7 @@ namespace CerealAPITests.Controllers
             new(cerealService.Object);
 
         [Fact]
-        public void GetCerealProducts()
+        public async Task GetCerealProducts()
         {
             #region Arrange
             var awesomeCereal = new CerealProduct(
@@ -32,13 +32,13 @@ namespace CerealAPITests.Controllers
                 null, null, null, null, null, null, null, null, null, null,
                 null, null, null, null, null, null, null, null, null, null,
                 null, null, null, null, null, null, null, null, null, null,
-                null, null, null, null, SortOrder.Asc)).Returns(cerealList);
+                null, null, null, null, SortOrder.Asc)).ReturnsAsync(cerealList);
 
             CerealController controller = GetController(cerealService);
             #endregion
 
             #region Act
-            IActionResult actual = controller.GetCereal();
+            IActionResult actual = await controller.GetCereal();
             #endregion
 
             #region Assert

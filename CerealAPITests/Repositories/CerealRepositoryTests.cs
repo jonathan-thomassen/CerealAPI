@@ -1,19 +1,23 @@
 ﻿
+using CerealAPI.Contexts;
 using CerealAPI.Models;
 using CerealAPI.Repositories;
+using CerealAPI.Services;
+using Microsoft.EntityFrameworkCore;
+using Moq;
 
 namespace CerealAPITests.Repositories
 {
     public class CerealRepositoryTests
     {
-        private static FakeCerealRepository GetCerealRepository() => new();
+        private static CerealRepository GetCerealRepository() => new();
 
         [Fact]
         public async Task AddCerealProduct()
         {
             #region Arrange
             var cereal = new CerealProduct(
-                10,
+                0,
                 "null",
                 'A',
                 'C',
@@ -30,7 +34,7 @@ namespace CerealAPITests.Repositories
                 10.0,
                 10.0,
                 10.0);
-            FakeCerealRepository repository = GetCerealRepository();
+            CerealRepository repository = GetCerealRepository();
             #endregion
 
             #region Act
@@ -40,6 +44,10 @@ namespace CerealAPITests.Repositories
             #region Assert
             Assert.True(actual);
             #endregion
+
+            #region Cleanup
+            await repository.DeleteCereal(cereal);
+            #endregion
         }
 
         [Fact]
@@ -47,8 +55,8 @@ namespace CerealAPITests.Repositories
         {
             #region Arrange
             await AddCerealProduct();
-            var expected = new CerealProduct(
-                1,
+            var cereal = new CerealProduct(
+                0,
                 "null",
                 'A',
                 'C',
@@ -65,15 +73,20 @@ namespace CerealAPITests.Repositories
                 10.0,
                 10.0,
                 10.0);
-            FakeCerealRepository repository = GetCerealRepository();
+            CerealRepository repository = GetCerealRepository();
+            await repository.PostCereal(cereal);
             #endregion
 
             #region Act
-            CerealProduct? actual = await repository.GetCerealById(expected.Id);
+            CerealProduct? actual = await repository.GetCerealById(cereal.Id);
             #endregion
 
             #region Assert
-            Assert.Equal(expected, actual);
+            Assert.Equal(cereal, actual);
+            #endregion
+
+            #region Cleanup
+            await repository.DeleteCereal(cereal);
             #endregion
         }
 
@@ -82,17 +95,16 @@ namespace CerealAPITests.Repositories
         {
             #region Arrange
             int erronousId = 1111;
-            FakeCerealRepository repository = GetCerealRepository();
+            CerealRepository repository = GetCerealRepository();
             #endregion
 
             #region Act
-            SystemException ex = await Assert.ThrowsAsync<SystemException>(
-                () => repository.GetCerealById(erronousId));
+
+            CerealProduct? actual = await repository.GetCerealById(erronousId);
             #endregion
 
             #region Assert
-            Assert.Equal($"Cereal does not exist with id {erronousId}.",
-                ex.Message);
+            Assert.Null(actual);
             #endregion
         }
     }

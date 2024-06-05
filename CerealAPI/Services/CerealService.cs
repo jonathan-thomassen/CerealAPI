@@ -8,7 +8,7 @@ namespace CerealAPI.Services
         ICerealRepository cerealRepository, IImageRepository imageRepository) :
         ICerealService
     {
-        public List<CerealProduct> GetCereal(
+        public async Task<List<CerealProduct>> GetCereal(
             int? id = null,
             string? name = null,
             Manufacturer? manufacturer = null,
@@ -65,7 +65,7 @@ namespace CerealAPI.Services
             CerealProperty? sortBy = null,
             SortOrder sortOrder = SortOrder.Asc)
         {
-            List<CerealProduct> cereals = cerealRepository.GetAllCereal();
+            List<CerealProduct> cereals = await cerealRepository.GetAllCereal();
 
             // TODO: Create some more functions here
             if (id != null)

@@ -5,7 +5,7 @@ namespace CerealAPI.Services
 {
     public interface ICerealService
     {
-        List<CerealProduct> GetCereal(
+        Task<List<CerealProduct>> GetCereal(
             int? id = null,
             string? name = null,
             Manufacturer? manufacturer = null,

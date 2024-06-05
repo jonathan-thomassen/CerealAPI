@@ -13,7 +13,7 @@ namespace CerealAPITests.Services
             new(cerealRepository.Object, imageRepository.Object);
 
         [Fact]
-        public void GetCerealProducts()
+        public async Task GetCerealProducts()
         {
             #region Arrange
             var awesomeCereal = new CerealProduct(
@@ -29,7 +29,7 @@ namespace CerealAPITests.Services
 
             var cerealRepository =
                 new Mock<ICerealRepository>(MockBehavior.Strict);
-            cerealRepository.Setup(x => x.GetAllCereal()).Returns(cerealList);
+            cerealRepository.Setup(x => x.GetAllCereal()).ReturnsAsync(cerealList);
 
             var imageRepository =
                 new Mock<IImageRepository>(MockBehavior.Strict);
@@ -38,7 +38,7 @@ namespace CerealAPITests.Services
             #endregion
 
             #region Act
-            List<CerealProduct> actual = service.GetCereal();
+            List<CerealProduct> actual = await service.GetCereal();
             #endregion
 
             #region Assert
