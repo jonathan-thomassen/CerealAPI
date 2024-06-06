@@ -52,7 +52,7 @@ namespace CerealAPITests.Repositories
         }
 
         [Fact]
-        public async void GetImageEntryById_DoesNotExist()
+        public async Task GetImageEntryById_DoesNotExist()
         {
             #region Arrange
             int erronousId = 1111;

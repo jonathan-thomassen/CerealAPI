@@ -51,7 +51,7 @@ namespace CerealAPITests.Controllers
         }
 
         [Fact]
-        public async void PostCerealProduct()
+        public async Task PostCerealProduct()
         {
             #region Arrange
             var awesomeCereal = new CerealProduct(
@@ -79,7 +79,7 @@ namespace CerealAPITests.Controllers
         }
 
         [Fact]
-        public async void UpdateCerealProduct()
+        public async Task UpdateCerealProduct()
         {
             #region Arrange
             var awesomeCereal = new CerealProduct(
@@ -111,7 +111,7 @@ namespace CerealAPITests.Controllers
         }
 
         [Fact]
-        public async void DeleteCerealProduct()
+        public async Task DeleteCerealProduct()
         {
             #region Arrange
             var cerealThatSucks = new CerealProduct(

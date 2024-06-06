@@ -15,7 +15,7 @@ namespace CerealAPITests.Controllers
             new(imageService.Object);
 
         [Fact]
-        public async void GetImageByCerealId()
+        public async Task GetImageByCerealId()
         {
             #region Arrange
             byte[] image = await File.ReadAllBytesAsync("../../../Images/Test.jpg");
@@ -33,9 +33,9 @@ namespace CerealAPITests.Controllers
             #region Assert
             Assert.IsType<FileContentResult>(actual);
             imageService.VerifyAll();
-            var returnedImage =
+            byte[]? returnedImage =
                 (actual as FileContentResult)?.FileContents as byte[];
-            var returnedImageType =
+            string? returnedImageType =
                 (actual as FileContentResult)?.ContentType as string;
 
             Assert.Equal(image, returnedImage);
@@ -44,7 +44,7 @@ namespace CerealAPITests.Controllers
         }
 
         [Fact]
-        public async void PostImage()
+        public async Task PostImage()
         {
             #region Arrange
             var imageEntry = new ImageEntry(0, 10, "./Images/Test.jpg");
@@ -55,7 +55,7 @@ namespace CerealAPITests.Controllers
             FileStream stream = File.OpenRead("../../../Images/Test.jpg");
 
             FormFile formFile =
-                new FormFile(stream, 0, stream.Length, name, filename)
+                new(stream, 0, stream.Length, name, filename)
                 {
                     Headers = new HeaderDictionary(),
                     ContentType = "image/jpeg"
@@ -84,7 +84,7 @@ namespace CerealAPITests.Controllers
         }
 
         [Fact]
-        public async void UpdateImage()
+        public async Task UpdateImage()
         {
             #region Arrange
             var imageEntry = new ImageEntry(0, 10, "./Images/Test.jpg");
@@ -96,7 +96,7 @@ namespace CerealAPITests.Controllers
             FileStream stream = File.OpenRead("../../../Images/TestUpd.png");
 
             FormFile formFile =
-                new FormFile(stream, 0, stream.Length, name, filename)
+                new(stream, 0, stream.Length, name, filename)
                 {
                     Headers = new HeaderDictionary(),
                     ContentType = "image/png"
@@ -126,7 +126,7 @@ namespace CerealAPITests.Controllers
         }
 
         [Fact]
-        public async void DeleteImage()
+        public async Task DeleteImage()
         {
             #region Arrange
             var imageEntry = new ImageEntry(0, 10, "null");

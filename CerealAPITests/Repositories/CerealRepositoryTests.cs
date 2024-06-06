@@ -91,7 +91,7 @@ namespace CerealAPITests.Repositories
         }
 
         [Fact]
-        public async void GetCerealProduct_DoesNotExist()
+        public async Task GetCerealProduct_DoesNotExist()
         {
             #region Arrange
             int erronousId = 1111;
