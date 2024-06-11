@@ -4,12 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CerealAPI.Contexts
 {
-    public class UserContext : IdentityDbContext<IdentityUser>
+    public class UserContext(DbContextOptions<UserContext> options)
+        : IdentityDbContext<IdentityUser>(options)
     {
-        public UserContext(DbContextOptions<UserContext> options) :
-            base(options)
-        { }
-
         protected override void OnConfiguring(
             DbContextOptionsBuilder optionsBuilder)
         {

@@ -169,30 +169,30 @@ namespace CerealAPI.Services
                 {
                     if (minIncl != null && (bool)minIncl)
                     {
-                        cereals = cereals.Where(c => (int?)c
+                        cereals = cereals.Where(c => Convert.ToInt32(c
                             .GetType().GetProperty(property.ToString())?
-                            .GetValue(c) >= min).ToList();
+                            .GetValue(c)) >= min).ToList();
                     }
                     else
                     {
-                        cereals = cereals.Where(c => (int?)c
+                        cereals = cereals.Where(c => Convert.ToInt32(c
                             .GetType().GetProperty(property.ToString())?
-                            .GetValue(c) > min).ToList();
+                            .GetValue(c)) > min).ToList();
                     }
                 }
                 if (max != null)
                 {
                     if (maxIncl != null && (bool)maxIncl)
                     {
-                        cereals = cereals.Where(c => (int?)c
+                        cereals = cereals.Where(c => Convert.ToInt32(c
                             .GetType().GetProperty(property.ToString())?
-                            .GetValue(c) >= min).ToList();
+                            .GetValue(c)) >= min).ToList();
                     }
                     else
                     {
-                        cereals = cereals.Where(c => (int?)c
+                        cereals = cereals.Where(c => Convert.ToInt32(c
                             .GetType().GetProperty(property.ToString())?
-                            .GetValue(c) > min).ToList();
+                            .GetValue(c)) > min).ToList();
                     }
                 }
 
