@@ -143,6 +143,8 @@ namespace CerealAPI.Controllers
         public async Task<IActionResult> PostCereal(
             [FromBody] CerealProduct cereal)
         {
+            cereal = cereal with { Id = default };
+
             CerealProduct? newCereal = await cerealService.PostCereal(cereal);
 
             if (newCereal != null)
